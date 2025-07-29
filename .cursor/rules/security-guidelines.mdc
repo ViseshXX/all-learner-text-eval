@@ -1,0 +1,87 @@
+# Security Guidelines Cursor Rules
+
+## Input Validation
+
+- Validate all user inputs at the API level
+- Use Pydantic models for request validation
+- Implement proper type checking for all parameters
+- Sanitize file uploads and check file types
+- Validate file sizes and content
+- Use allowlist approach for acceptable inputs
+
+## Authentication & Authorization
+
+- Implement proper JWT token validation
+- Use secure token storage (httpOnly cookies)
+- Implement proper session management
+- Use role-based access control (RBAC)
+- Secure sensitive endpoints with proper decorators
+- Implement proper logout functionality
+
+## Data Protection
+
+- Use environment variables for sensitive configuration
+- Never hardcode secrets, API keys, or passwords
+- Encrypt sensitive data at rest
+- Use HTTPS in production environments
+- Implement proper CORS policies
+- Use secure headers (HSTS, CSP, etc.)
+
+## API Security
+
+- Implement rate limiting to prevent abuse
+- Use proper HTTP status codes for errors
+- Don't expose internal error details to clients
+- Implement request size limits
+- Use parameterized queries to prevent injection
+- Validate all API parameters
+
+## Error Handling
+
+- Don't expose sensitive information in error messages
+- Log security events appropriately
+- Use generic error messages for client-facing errors
+- Implement proper audit logging
+- Handle exceptions securely
+
+## File Security
+
+- Validate file uploads thoroughly
+- Check file types and content
+- Implement file size limits
+- Store files in secure locations
+- Use secure file naming conventions
+- Implement proper file access controls
+
+## Database Security
+
+- Use parameterized queries only
+- Implement proper database user permissions
+- Use connection pooling securely
+- Encrypt sensitive database fields
+- Implement proper backup security
+- Use database migrations safely
+
+## Logging & Monitoring
+
+- Log security events and errors
+- Don't log sensitive information
+- Implement proper log rotation
+- Monitor for suspicious activities
+- Use structured logging for security events
+
+## Dependencies
+
+- Keep dependencies updated
+- Use dependency scanning tools
+- Avoid using deprecated packages
+- Check for known vulnerabilities
+- Use trusted package sources only
+
+## Environment Security
+
+- Use different configurations for different environments
+- Secure production environment properly
+- Implement proper access controls
+- Use secure deployment practices
+- Monitor production environment 

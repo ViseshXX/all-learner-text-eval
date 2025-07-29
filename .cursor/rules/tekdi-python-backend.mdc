@@ -1,0 +1,98 @@
+# Tekdi Cursor Rules for Python FastAPI Backend
+
+## Code Style and Standards
+
+- Follow PEP 8 style guide for Python code
+- Use snake_case for variables, functions, and modules
+- Use PascalCase for classes
+- Use UPPER_CASE for constants
+- Use 4 spaces for indentation, never tabs
+- Maximum line length of 88 characters (Black formatter default)
+- Add type hints to all function parameters and return values
+- Use meaningful variable and function names
+- Write docstrings for all public functions and classes
+
+## FastAPI Specific Rules
+
+- Use Pydantic models for request/response validation
+- Implement proper HTTP status codes (200, 201, 400, 401, 403, 404, 500)
+- Use dependency injection for shared resources
+- Implement proper error handling with HTTPException
+- Use async/await for I/O operations
+- Structure API endpoints with clear naming conventions
+- Use proper request/response models with Pydantic
+- Implement input validation for all endpoints
+- Use proper CORS configuration
+- Implement rate limiting for API endpoints
+
+## Project Structure
+
+- Organize code by feature/domain
+- Separate routes, models, services, and utilities
+- Use __init__.py files for proper module structure
+- Keep main app.py file minimal
+- Use relative imports within the project
+- Structure: app.py, routes/, models/, services/, utils/
+
+## Error Handling
+
+- Use try-catch blocks for external API calls
+- Log errors with sufficient context
+- Return structured error responses
+- Handle edge cases gracefully
+- Use custom exception classes when needed
+- Implement global exception handlers
+
+## Security Best Practices
+
+- Validate all user inputs
+- Use environment variables for sensitive data
+- Implement proper authentication/authorization
+- Sanitize file uploads
+- Use HTTPS in production
+- Implement rate limiting
+- Follow OWASP security guidelines
+- Never expose sensitive information in logs
+
+## Performance Optimization
+
+- Use async/await for database operations
+- Implement connection pooling
+- Use caching where appropriate
+- Optimize database queries
+- Monitor application performance
+- Use appropriate data structures
+
+## Testing
+
+- Write unit tests for all functions
+- Use pytest for testing framework
+- Mock external dependencies
+- Test both success and error cases
+- Maintain good test coverage
+- Use descriptive test names
+
+## Documentation
+
+- Write clear docstrings for all functions
+- Document API endpoints with proper descriptions
+- Include parameter types and return types
+- Add README files for complex features
+- Use type hints consistently
+
+## Git Practices
+
+- Write clear, descriptive commit messages
+- Use feature branches for development
+- Keep commits atomic and focused
+- Review code before merging
+- Follow conventional commit format
+
+## Code Quality
+
+- Keep functions small and focused
+- Follow DRY principle
+- Use meaningful variable names
+- Add comments for complex logic
+- Refactor code regularly
+- Use linting tools (flake8, black, mypy) 
