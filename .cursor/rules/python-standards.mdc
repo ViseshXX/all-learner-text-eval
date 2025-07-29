@@ -1,0 +1,84 @@
+# Python Standards Cursor Rules
+
+## Code Style (PEP 8)
+
+- Use 4 spaces for indentation, never tabs
+- Maximum line length of 88 characters (Black formatter)
+- Use snake_case for variables, functions, and modules
+- Use PascalCase for classes
+- Use UPPER_CASE for constants
+- Use descriptive names, avoid abbreviations
+- Add spaces around operators and after commas
+
+## Type Hints
+
+- Add type hints to all function parameters
+- Specify return types for all functions
+- Use Optional[] for nullable parameters
+- Use Union[] for multiple possible types
+- Use List[], Dict[], Tuple[] for collections
+- Import types from typing module when needed
+
+## Function Design
+
+- Keep functions small and focused (max 20-30 lines)
+- Use meaningful function names that describe what they do
+- Limit function parameters (max 5-6 parameters)
+- Use default parameters for optional arguments
+- Return early to reduce nesting
+
+## Documentation
+
+- Write docstrings for all public functions and classes
+- Use Google or NumPy docstring format
+- Include parameter types and descriptions
+- Document return values and exceptions
+- Add examples for complex functions
+
+## Error Handling
+
+- Use specific exception types, not generic Exception
+- Catch exceptions at the appropriate level
+- Log errors with sufficient context
+- Use try-except-else-finally when appropriate
+- Raise custom exceptions when needed
+
+## Import Organization
+
+- Group imports: standard library, third-party, local
+- Use absolute imports for external packages
+- Use relative imports within the project
+- Avoid wildcard imports (*)
+- Import only what you need
+
+## Code Organization
+
+- Use __init__.py files for proper module structure
+- Organize code by feature or domain
+- Keep related functionality together
+- Use classes to group related data and behavior
+- Separate concerns (business logic, data access, UI)
+
+## Performance
+
+- Use list comprehensions for simple transformations
+- Use generator expressions for large datasets
+- Avoid unnecessary object creation
+- Use appropriate data structures
+- Profile code for bottlenecks
+
+## Testing
+
+- Write unit tests for all functions
+- Use descriptive test names
+- Test both success and error cases
+- Use mocking for external dependencies
+- Maintain good test coverage
+
+## Code Quality
+
+- Follow DRY principle (Don't Repeat Yourself)
+- Use meaningful variable names
+- Add comments for complex logic
+- Refactor code regularly
+- Use linting tools (flake8, black, mypy) 

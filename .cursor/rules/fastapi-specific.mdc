@@ -1,0 +1,65 @@
+# FastAPI Specific Cursor Rules
+
+## API Design Patterns
+
+- Use Pydantic models for all request/response schemas
+- Implement proper HTTP status codes for each response
+- Use dependency injection for shared resources (database, auth)
+- Structure endpoints with clear REST conventions
+- Use proper HTTP methods (GET, POST, PUT, DELETE, PATCH)
+
+## Request/Response Models
+
+- Create separate Pydantic models for requests and responses
+- Use Field() for additional validation and documentation
+- Implement proper validation for all input fields
+- Use Optional[] for nullable fields
+- Add example values for better API documentation
+
+## Error Handling
+
+- Use HTTPException for client errors (400, 401, 403, 404)
+- Return consistent error response format
+- Log errors with request context
+- Implement global exception handlers
+- Use proper status codes for different error types
+
+## Authentication & Authorization
+
+- Implement proper JWT token handling
+- Use dependency injection for auth verification
+- Implement role-based access control
+- Secure sensitive endpoints with proper decorators
+- Use environment variables for secret keys
+
+## Database Integration
+
+- Use async database operations with SQLAlchemy
+- Implement proper connection pooling
+- Use database transactions for data consistency
+- Implement proper error handling for database operations
+- Use database migrations for schema changes
+
+## API Documentation
+
+- Use proper docstrings for all endpoints
+- Include example requests and responses
+- Document all parameters and response fields
+- Use tags for organizing endpoints
+- Implement proper OpenAPI documentation
+
+## Performance
+
+- Use async/await for I/O operations
+- Implement proper caching strategies
+- Use background tasks for long-running operations
+- Optimize database queries
+- Monitor API response times
+
+## Testing
+
+- Write unit tests for all endpoints
+- Use TestClient for API testing
+- Mock external dependencies
+- Test both success and error scenarios
+- Use proper test fixtures and setup 

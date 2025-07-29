@@ -1,0 +1,94 @@
+# Testing Standards Cursor Rules
+
+## Test Structure
+
+- Write unit tests for all functions and classes
+- Use pytest as the testing framework
+- Organize tests in test_*.py files
+- Use descriptive test function names
+- Group related tests in test classes
+- Use fixtures for common test setup
+
+## Test Coverage
+
+- Aim for at least 80% code coverage
+- Test both success and error scenarios
+- Test edge cases and boundary conditions
+- Test all public functions and methods
+- Include integration tests for API endpoints
+- Test database operations with test database
+
+## Unit Testing
+
+- Test one function/method per test
+- Use descriptive test names that explain what is being tested
+- Arrange-Act-Assert pattern for test structure
+- Mock external dependencies (databases, APIs, file system)
+- Test both positive and negative cases
+- Use parameterized tests for multiple scenarios
+
+## API Testing
+
+- Use FastAPI TestClient for API testing
+- Test all HTTP methods (GET, POST, PUT, DELETE)
+- Verify correct HTTP status codes
+- Test request/response validation
+- Test authentication and authorization
+- Test error handling scenarios
+
+## Mocking
+
+- Mock external API calls
+- Mock database operations in unit tests
+- Use unittest.mock or pytest-mock
+- Mock file system operations
+- Mock time-dependent operations
+- Verify mock calls when needed
+
+## Test Data
+
+- Use factories for creating test data
+- Use fixtures for common test data
+- Clean up test data after tests
+- Use different test data for different scenarios
+- Avoid hardcoded test values
+
+## Database Testing
+
+- Use test database for integration tests
+- Use database transactions for test isolation
+- Clean up database after each test
+- Use database fixtures for common data
+- Test database migrations
+
+## Performance Testing
+
+- Test API response times
+- Test database query performance
+- Use profiling tools for performance testing
+- Test with realistic data volumes
+- Monitor memory usage in tests
+
+## Test Configuration
+
+- Use separate test configuration
+- Use environment variables for test settings
+- Configure test database connection
+- Set up test logging
+- Use test-specific fixtures
+
+## Continuous Integration
+
+- Run tests on every commit
+- Fail builds on test failures
+- Generate coverage reports
+- Run linting and formatting checks
+- Use pre-commit hooks for testing
+
+## Test Documentation
+
+- Document complex test scenarios
+- Explain test data setup
+- Document test dependencies
+- Keep test documentation updated
+- Use comments for complex test logic 
