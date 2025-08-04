@@ -4,8 +4,8 @@ import logging
 from fastapi import APIRouter, HTTPException, Depends
 import numpy as np
 from pydantic import BaseModel
-from utils import calculate_wpm_from_audio, classify_expression, classify_intensity, classify_rate, classify_smoothness, classify_tempo, denoise_with_rnnoise, extract_intensity_praat, get_error_arrays, get_pause_count, split_into_phonemes, processLP, extract_pitch_praat, classify_pitch
-from schemas import TextData, audioData, PhonemesRequest, PhonemesResponse, ErrorArraysResponse, AudioProcessingResponse
+from utils import calculate_wpm_from_audio, classify_expression, classify_intensity, classify_rate, classify_smoothness, classify_tempo, denoise_with_rnnoise, extract_intensity_praat, get_error_arrays, get_pause_count, split_into_phonemes, processLP, extract_pitch_praat, classify_pitch, calculate_reading_complexity, get_score
+from schemas import TextData, audioData, PhonemesRequest, PhonemesResponse, ErrorArraysResponse, AudioProcessingResponse, ReadingComplexityRequest, ReadingComplexityResponse
 from typing import List
 import jiwer
 import eng_to_ipa as p
@@ -325,6 +325,67 @@ async def audio_processing(data: audioData):
             "intensity_mean": intensity_mean,
             "intensity_std": intensity_std,
             "expression_classification": expression_classification,
+        }
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
+@router.post('/getReadingComplexity', response_model=ReadingComplexityResponse, summary="Calculate Reading Complexity", description="Calculates reading complexity score for text in supported languages.", responses={
+    400: {
+        "description": "Bad Request",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Text cannot be empty."}
+            }
+        }
+    },
+    422: {
+        "description": "Unprocessable Entity",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": [
+                        {
+                            "loc": ["body", "text"],
+                            "msg": "field required",
+                            "type": "value_error.missing"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    500: {
+        "description": "Internal Server Error",
+        "content": {
+            "application/json": {
+                "example": {"detail": "Unexpected error: <error_message>"}
+            }
+        }
+    }
+})
+async def get_reading_complexity(data: ReadingComplexityRequest):
+    try:
+        # Validate input data
+        if not data.text.strip():
+            raise HTTPException(status_code=400, detail="Text cannot be empty.")
+        
+        # Validate language
+        allowed_languages = {"kn", "te", "hi"}
+        if data.language not in allowed_languages:
+            raise HTTPException(status_code=400, detail=f"Unsupported language: {data.language}. Supported languages are: {', '.join(allowed_languages)}")
+
+        # Calculate reading complexity
+        try:
+            total_score, scores_data, syllable_count = calculate_reading_complexity(data.text, data.language)
+        except Exception as e:
+            logger.error(f"Error calculating reading complexity: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error calculating reading complexity: {str(e)}")
+
+        return {
+            "total_score": total_score
         }
     except HTTPException as e:
         raise e

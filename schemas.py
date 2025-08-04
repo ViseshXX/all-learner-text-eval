@@ -49,3 +49,10 @@ class AudioProcessingResponse(BaseModel):
     intensity_mean: Optional[float] = Field(None, example=65, description="Average intensity in dB.")
     intensity_std: Optional[float] = Field(None, example=8, description="Standard deviation of intensity.")
     expression_classification: Optional[str] = Field(None, description="Expression classification result.")
+
+class ReadingComplexityRequest(BaseModel):
+    text: str = Field(..., example="ಸಾಮರ್ಥ್ಯ", description="The text to analyze for reading complexity.")
+    language: str = Field(..., example="kn", description="The language code (kn, te, hi).")
+
+class ReadingComplexityResponse(BaseModel):
+    total_score: float = Field(..., example=5.2, description="Total complexity score for the text.")

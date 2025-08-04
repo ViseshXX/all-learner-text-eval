@@ -8,6 +8,8 @@ from fuzzywuzzy import fuzz
 import numpy as np
 import soundfile as sf
 import parselmouth
+import regex
+import configs
 
 english_phoneme = ["b","d","f","g","h","ʤ","k","l","m","n","p","r","s","t","v","w","z","ʒ","tʃ","ʃ","θ","ð","ŋ","j","æ","eɪ","ɛ","i:","ɪ","aɪ","ɒ","oʊ","ʊ","ʌ","u:","ɔɪ","aʊ","ə","eəʳ","ɑ:","ɜ:ʳ","ɔ:","ɪəʳ","ʊəʳ","i","u","ɔ","ɑ","ɜ","e","ʧ","o","y","a", "x", "c"]
 anamoly_list = {}
@@ -641,3 +643,124 @@ def classify_rate(estimated_wpm: float, language: str, single_word: bool = False
 
     # Fallback (should never fire with the tables above)
     return "Very Disfluent"
+
+# Reading Complexity Functions
+def find_syllables(word, language):
+    """Find syllables for a given word based on language configuration."""
+    config = configs.language_data
+    letter = config[language]["regex"]["letter"]
+    trailing_letter = config[language]["regex"]["trailing_letter"]
+    control = config[language]["regex"]["control"]
+    regex_exp = rf'{letter}(?:{control}{letter}|{trailing_letter})*'
+    syllables = regex.findall(regex_exp, word)
+    return syllables
+
+def is_samyukta(syllable, language):
+    """Check if a syllable is samyutkashara and return included consonants."""
+    config = configs.language_data
+    virama = config[language]["virama"]
+    consonants = []
+    for i, char in enumerate(syllable):
+        if (i > 0 and syllable[i - 1] == virama) or (i < len(syllable) - 1 and syllable[i + 1] == virama):
+            consonants.append(char)
+    return consonants
+
+def replace_nukta_chars(word, language):
+    """Replace nukta characters in Hindi text."""
+    config = configs.language_data
+    if language != 'hi' or 'nukta' not in config[language]:
+        return word
+    
+    nukta = config[language]['nukta']
+    char_replace = config[language]['Nukta_char_replace']
+    chars = list(word)
+    i = 1
+    while i < len(chars):
+        if chars[i] == nukta:
+            base = chars[i - 1]
+            if base in char_replace:
+                # Replace base + nukta with nukta form
+                chars[i - 1] = char_replace[base]
+                del chars[i]  # Remove nukta char
+                continue  # Re-check the same index (since we removed one char)
+        i += 1
+    return ''.join(chars)
+
+def add_arkavattu_score(samyukta_arr, language):
+    """Check for arkavattu and return score."""
+    config = configs.language_data
+    if "arkavattu" in config[language] and samyukta_arr and samyukta_arr[0] == config[language]["arkavattu"]:
+        return 1.5
+    return 0
+
+def get_score(word, language):
+    """Calculate complexity score for a single word."""
+    config = configs.language_data
+    scores = config[language]["score"]
+    addedscores = []
+    word = word.replace(" ", "")
+    
+    if ("nukta" in config[language] and config[language]["nukta"] in word):
+        word = replace_nukta_chars(word, language)
+    
+    syllables = find_syllables(word, language)
+    score = 0
+    syllable_count_weightage = (len(syllables) - 1) * 0.5
+    score += syllable_count_weightage
+    addedscores.append(syllable_count_weightage)
+    
+    for syllable in syllables:
+        similarities = set()
+        resp = is_samyukta(syllable, language)
+        
+        # Check for arkavattu in language and add the score of it.
+        if ("arkavattu" in config[language] and config[language]["arkavattu"] in syllable and len(resp) > 0):
+            arka_score = add_arkavattu_score(resp, language)
+            if arka_score > 0:
+                addedscores.append(1.5)
+                score = score + arka_score
+        
+        # Add the Samyutakshra Weightage
+        if len(resp) > 0:
+            if len(resp) == 2:  # If there are two consonants
+                if resp[0] == resp[1]:  # If they are the same, the Weight_base of that consonant is added. along with additional weight of 1
+                    score += scores[resp[0]]['Weight_base'] + 1
+                    addedscores.append(scores[resp[0]]['Weight_base'] + 1)
+                else:  # If they are different, the Weight_base of both consonants is added. along with additional weight of 2
+                    score += scores[resp[0]]['Weight_base'] + scores[resp[1]]['Weight_base'] + 2
+                    addedscores.append(scores[resp[0]]['Weight_base'] + scores[resp[1]]['Weight_base'] + 2)
+            
+            if len(resp) > 2:  # If there are more than two consonants, the Weight_base of 3 consonants is added along with additional 3 points are added.
+                score += scores[resp[0]]['Weight_base'] + scores[resp[1]]['Weight_base'] + scores[resp[2]]['Weight_base'] + 3
+                addedscores.append(scores[resp[0]]['Weight_base'] + scores[resp[1]]['Weight_base'] + scores[resp[2]]['Weight_base'] + 3)
+        
+        for char in syllable:
+            if char in scores:
+                score += scores[char]['Weight']  # Add the individual Char weightage.
+                addedscores.append(scores[char]['Weight'])
+                
+                if scores[char]['similar'] > 0:
+                    if len(similarities) == 0:
+                        score += 0.6  # Add the similar score if applicable.
+                        addedscores.append(0.6)
+                        similarities.add(char)
+    
+    score = round(score, 2)
+    return score, addedscores, len(syllables)
+
+def calculate_reading_complexity(content, language):
+    """Calculate reading complexity score for entire content."""
+    content = regex.sub(r'[^\w\s]', '', content)
+    split_content = content.split()
+    final_scores = 0
+    scores_data = []
+    syllb_count = 0
+    
+    for word in split_content:
+        output = get_score(word, language)
+        final_scores += output[0]
+        scores_data.append(output[1])
+        syllb_count += output[2]
+    final_scores = round(final_scores, 2)
+
+    return final_scores, scores_data, syllb_count
