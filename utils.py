@@ -539,7 +539,7 @@ def compute_wpm_score(estimated_wpm: float, language: str, single_word: bool) ->
         (120, float("inf"), 1)  # Erratic
     ]
 
-    KN_BANDS = [
+    INDIC_BANDS = [
         (0,   15,   1),
         (15,  30,   2),
         (30,  50,   3),
@@ -560,7 +560,7 @@ def compute_wpm_score(estimated_wpm: float, language: str, single_word: bool) ->
     if single_word:
         bands = SINGLE_WORD_BANDS
     else:
-        bands = KN_BANDS if language == "kn" else DEFAULT_BANDS
+        bands = DEFAULT_BANDS if language == "en" else INDIC_BANDS
 
     # Return the first matching score 
     for low, high, score in bands:
@@ -610,7 +610,7 @@ def classify_rate(estimated_wpm: float, language: str, single_word: bool = False
         (120, float("inf"), "Very Disfluent"),
     ]
 
-    KN_BANDS = [
+    INDIC_BANDS = [
         (0,   15,   "Very Disfluent"),
         (15,  30,   "Disfluent"),
         (30,  50,   "Moderately Fluent"),
@@ -632,8 +632,8 @@ def classify_rate(estimated_wpm: float, language: str, single_word: bool = False
     language = language.lower()
     bands = (
         SINGLE_BANDS if single_word
-        else KN_BANDS if language == "kn"
-        else DEFAULT_BANDS
+        else DEFAULT_BANDS if language == "en"
+        else INDIC_BANDS
     )
 
     #  Return the first matching label 
