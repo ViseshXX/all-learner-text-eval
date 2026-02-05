@@ -464,7 +464,10 @@ def classify_expression(pitch_values, intensity_values):
     }.get(avg_score, "Very Disfluent")
     
 def classify_smoothness(pause_count, avg_pause):
-
+    # Handle None values
+    if pause_count is None or avg_pause is None:
+        return None
+    
     #  Count-based score
     if pause_count <= 2:
         count_score = 4
