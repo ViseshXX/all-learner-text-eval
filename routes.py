@@ -62,7 +62,7 @@ async def compute_errors(data: TextData):
 
 
         # Validate language
-        allowed_languages = {"en", "ta", "te", "kn", "hi", "gu", "or"}
+        allowed_languages = {"en", "ta", "te", "kn", "hi", "gu", "or", "ne"}
 
         if language not in allowed_languages:
             raise HTTPException(status_code=400, detail=f"Unsupported language: {language}. Supported languages are: {', '.join(allowed_languages)}")
@@ -373,7 +373,7 @@ async def get_reading_complexity(data: ReadingComplexityRequest):
             raise HTTPException(status_code=400, detail="Text cannot be empty.")
         
         # Validate language
-        allowed_languages = {"kn", "te", "hi"}
+        allowed_languages = {"kn", "te", "hi", "ne"}
         if data.language not in allowed_languages:
             raise HTTPException(status_code=400, detail=f"Unsupported language: {data.language}. Supported languages are: {', '.join(allowed_languages)}")
 
