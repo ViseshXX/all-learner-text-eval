@@ -52,7 +52,7 @@ class AudioProcessingResponse(BaseModel):
 
 class ReadingComplexityRequest(BaseModel):
     text: str = Field(..., example="ಸಾಮರ್ಥ್ಯ", description="The text to analyze for reading complexity.")
-    language: str = Field(..., example="kn", description="The language code (kn, te, hi).")
+    language: str = Field(..., example="kn", description="The language code (kn, te, hi, ne).")
 
 class ReadingComplexityResponse(BaseModel):
     total_score: float = Field(..., example=5.2, description="Total complexity score for the text.")
