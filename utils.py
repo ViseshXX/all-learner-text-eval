@@ -669,9 +669,11 @@ def is_samyukta(syllable, language):
     return consonants
 
 def replace_nukta_chars(word, language):
-    """Replace nukta characters in Hindi text."""
+    """Compose base consonant + nukta into the precomposed nukta character
+    (e.g. ड + ़ -> ड़), for any language whose config declares a nukta
+    mapping (currently hi, ne)."""
     config = configs.language_data
-    if language != 'hi' or 'nukta' not in config[language]:
+    if 'nukta' not in config[language] or 'Nukta_char_replace' not in config[language]:
         return word
     
     nukta = config[language]['nukta']
